@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<meta name="description" content="Checklist interativo para acompanhar a Jornada RSC-PCCTAE, da preparação ao acompanhamento do processo no SIPAC."/>
+<title>Checklist RSC | Portal de Apoio ao RSC</title>
+<link href="assets/css/style.css" rel="stylesheet"/>
+<style>
+:root{
+  --azul:#005b8f; --azul2:#173f59; --verde:#2c7a59; --vermelho:#c51418;
+  --amarelo:#f2c94c; --fundo:#f4f7f8; --texto:#263744; --cinza:#5c6b73;
+  --borda:#d7e1e6; --branco:#fff; --ok:#2e7d32; --shadow:0 10px 30px rgba(24,63,89,.08);
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body.journey-page{margin:0;font-family:Arial,Helvetica,sans-serif;background:var(--fundo);color:var(--texto);line-height:1.55}
+a{color:var(--azul)}
+.journey-hero{background:linear-gradient(120deg,var(--azul2),var(--azul));color:#fff;padding:28px 0 24px}
+.journey-wrap{width:min(1040px,calc(100% - 28px));margin:auto}
+.eyebrow{font-size:.74rem;font-weight:900;letter-spacing:.12em;text-transform:uppercase;color:#ffe38a}
+h1{font-size:clamp(2rem,5vw,3.2rem);line-height:1.05;margin:7px 0 10px}
+.journey-hero p{margin:0;max-width:780px;color:#e9f5fb;font-size:1.05rem}
+.sticky-progress{position:sticky;top:0;z-index:50;background:#fff;border-bottom:1px solid var(--borda);box-shadow:0 4px 16px rgba(0,0,0,.05)}
+.progress-row{display:grid;grid-template-columns:1fr auto;gap:14px;align-items:center;padding:12px 0}
+.progress-track{height:13px;border-radius:999px;background:#e5edf1;overflow:hidden}
+.progress-bar{height:100%;width:0;background:linear-gradient(90deg,var(--verde),#58a978);transition:width .25s ease}
+.progress-number{font-weight:900;color:var(--azul2);min-width:105px;text-align:right}
+.toolbar{display:flex;gap:8px;flex-wrap:wrap;padding-bottom:12px}
+button,.button{border:1px solid var(--borda);border-radius:9px;padding:9px 12px;background:#fff;color:var(--azul2);font-weight:800;cursor:pointer;text-decoration:none;font-size:.9rem}
+button:hover,.button:hover{border-color:#8fb8c9}
+button.danger{color:#9b1c1c}
+.intro{padding:30px 0 12px}
+.summary-card{background:#fff;border:1px solid var(--borda);border-radius:15px;padding:22px;box-shadow:var(--shadow)}
+.summary-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:16px}
+.metric{background:#f5fafc;border:1px solid #dbe9ef;border-radius:12px;padding:14px}
+.metric strong{display:block;font-size:1.4rem;color:var(--azul2)}
+.metric span{font-size:.83rem;color:var(--cinza)}
+.route{padding:18px 0 60px}
+.phase{background:#fff;border:1px solid var(--borda);border-radius:16px;margin:16px 0;box-shadow:var(--shadow);overflow:hidden}
+.phase[open]{border-color:#b9d1dc}
+.phase summary{list-style:none;cursor:pointer;padding:18px 20px;display:flex;align-items:center;gap:14px}
+.phase summary::-webkit-details-marker{display:none}
+.phase-number{width:42px;height:42px;border-radius:50%;display:grid;place-items:center;background:var(--azul2);color:#fff;font-weight:900;flex:0 0 auto}
+.phase-title{flex:1}
+.phase-title strong{display:block;color:var(--azul2);font-size:1.13rem}
+.phase-title small{color:var(--cinza)}
+.phase-pct{font-size:.82rem;font-weight:900;background:#edf6f0;color:#256a44;padding:5px 9px;border-radius:999px}
+.phase-body.journey-page{padding:0 20px 22px;border-top:1px solid #edf1f3}
+.phase-lead{margin:18px 0;color:var(--cinza)}
+.checklist{display:grid;gap:10px}
+.task{display:grid;grid-template-columns:28px 1fr;gap:10px;align-items:start;padding:13px 14px;border:1px solid var(--borda);border-radius:11px;background:#fff}
+.task:has(input:checked){background:#f0f8f3;border-color:#a9d1b7}
+.task input{width:20px;height:20px;margin:2px 0 0;accent-color:var(--verde)}
+.task b{color:var(--azul2)}
+.task small{display:block;color:var(--cinza);margin-top:3px}
+.rule{border-left:5px solid var(--amarelo);background:#fff9e9;padding:14px 16px;margin:16px 0;border-radius:0 8px 8px 0}
+.rule.red{border-left-color:var(--vermelho);background:#fff4f2}
+.rule.green{border-left-color:var(--verde);background:#f1f8f3}
+.logic{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin:12px 0}
+.logic span{padding:8px 10px;border:1px solid var(--borda);background:#f9fbfc;border-radius:8px;font-weight:800}
+.logic b{color:var(--vermelho)}
+.links{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
+.link{display:inline-flex;align-items:center;min-height:38px;padding:8px 11px;border-radius:8px;background:var(--azul2);color:#fff;text-decoration:none;font-weight:800;font-size:.86rem}
+.link.secondary{background:#fff;color:var(--azul2);border:1px solid var(--azul2)}
+textarea,input[type="text"]{width:100%;border:1px solid var(--borda);border-radius:10px;padding:12px;font:inherit;background:#fff;color:var(--texto)}
+textarea{min-height:130px;resize:vertical}
+.workspace{margin:16px 0;padding:16px;border-radius:12px;background:#f8fbfc;border:1px solid #dce9ee}
+.workspace h3{margin:0 0 8px;color:var(--azul2);font-size:1rem}
+.files{display:grid;grid-template-columns:repeat(2,1fr);gap:9px;margin:12px 0}
+.file{padding:11px;border:1px solid var(--borda);border-radius:9px;background:#fbfcfd}
+.file.optional{border-style:dashed}
+.final-status{margin-top:20px;background:linear-gradient(120deg,#eef8f2,#f5fbfa);border:1px solid #bcd8c4;border-radius:15px;padding:20px}
+.final-status h2{margin:0;color:var(--azul2)}
+.status-big{font-weight:900;font-size:1.25rem;color:var(--verde)}
+.journey-footer{background:#24343d;color:#dbe5ea;padding:28px 0}
+.journey-footer p{margin:4px 0}
+@media(max-width:760px){
+  .summary-grid,.files{grid-template-columns:1fr}
+  .progress-row{grid-template-columns:1fr}
+  .progress-number{text-align:left}
+  .phase summary{align-items:flex-start}
+}
+@media print{
+  .sticky-progress,.toolbar{display:none!important}
+  body.journey-page{background:#fff}
+  .phase{break-inside:avoid;box-shadow:none}
+}
+
+@media print{
+  .institutional,.top,.sticky-progress,.journey-footer,.toolbar{display:none!important}
+  details.phase{display:block!important;break-inside:auto!important;box-shadow:none!important}
+  details.phase > summary{display:flex!important}
+  details.phase > .phase-body{display:block!important}
+  details.phase:not([open]) > .phase-body{display:block!important}
+  .task{break-inside:avoid}
+  .journey-hero{padding:18px 0!important}
+  .route{padding-bottom:0!important}
+}
+</style>
+</head>
+<body class="journey-page">
+<a class="skip" href="#main">Pular para o conteúdo</a>
+<header class="institutional"><div class="container"><img alt="Hospital das Clínicas da UFPE, Ebserh e SUS" class="logo" src="assets/img/identidade-hc-ufpe.png"/><div class="unit"><strong>Divisão de Gestão de Pessoas</strong><br/>Gerência Administrativa<br><span class="hc-identificacao">Hospital das Clínicas da UFPE/HU Brasil</span></div></div></header>
+<div class="top"><div class="container"><a class="brand" href="index.html">Portal de Apoio ao RSC</a><button aria-expanded="false" class="menu-btn">Menu</button><nav class="nav"><a href="index.html">Início</a><a href="entenda.html">Entenda o RSC</a><a href="como-preparar.html">Como preparar</a><a href="como-solicitar.html">Como solicitar</a><a href="memorial.html">Memorial (Trajetória)</a><a href="documentos.html">Documentos</a><a href="jornada.html">Checklist RSC</a><a href="biblioteca.html">Biblioteca</a><a href="https://drive.google.com/file/d/1VhdOGoJmjpVEaIsg-2QTxiIRKxzlasTm/view" target="_blank" rel="noopener noreferrer">FAQ da UFPE</a></nav></div></div>
+<section class="journey-hero"><div class="journey-wrap"><span class="eyebrow">Guia interativo • HC-UFPE / HU Brasil</span><h1>Checklist da Jornada RSC-PCCTAE</h1><p>Marque o que já concluiu e acompanhe sua jornada desde o levantamento da trajetória profissional até o protocolo e o acompanhamento do processo no SIPAC.</p></div></section>
+<div class="sticky-progress"><div class="journey-wrap"><div class="progress-row"><div class="progress-track" aria-label="Progresso da jornada"><div class="progress-bar" id="progressBar"></div></div><div class="progress-number" id="progressNumber">0% concluído</div></div><div class="toolbar"><button type="button" onclick="expandAll()">Abrir todas as etapas</button><button type="button" onclick="collapseAll()">Recolher etapas</button><button type="button" onclick="window.print()">Imprimir / salvar em PDF</button><button type="button" class="danger" onclick="resetJourney()">Reiniciar checklist</button></div></div></div>
+<main id="main">
+<section class="intro">
+  <div class="journey-wrap">
+    <div class="summary-card">
+      <strong style="color:var(--azul2);font-size:1.2rem">Como usar</strong>
+      <p>Marque cada tarefa à medida que concluir. O progresso fica salvo <strong>neste navegador</strong>; você pode fechar a página e continuar depois. Use os campos de anotação para registrar atividades, número do processo e pendências.</p>
+      <div class="summary-grid">
+        <div class="metric"><strong id="doneCount">0</strong><span>tarefas concluídas</span></div>
+        <div class="metric"><strong id="todoCount">0</strong><span>tarefas pendentes</span></div>
+        <div class="metric"><strong>8</strong><span>etapas da jornada</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="route">
+<div class="journey-wrap">
+
+<details class="phase" open data-phase="1">
+<summary><span class="phase-number">1</span><span class="phase-title"><strong>Reconstrua sua trajetória</strong><small>Comece pelas atividades e experiências — não pelos documentos.</small></span><span class="phase-pct">0%</span></summary>
+<div class="phase-body">
+  <p class="phase-lead">Faça um levantamento das experiências que pretende avaliar: projetos, comissões, cursos, eventos, ensino, pesquisa, extensão, gestão, responsabilidades técnicas, produções e outras atividades profissionais.</p>
+  <div class="checklist">
+    <label class="task"><input type="checkbox" data-task="1.1"><span><b>Listei as atividades e experiências que pretendo utilizar.</b><small>Registre período, unidade/instituição e uma breve descrição de cada atividade.</small></span></label>
+    <label class="task"><input type="checkbox" data-task="1.2"><span><b>Consultei os Anexos do Decreto para verificar quais experiências podem ser enquadradas.</b></span></label>
+    <label class="task"><input type="checkbox" data-task="1.3"><span><b>Separei as atividades que realmente pretendo apresentar para pontuação.</b></span></label>
+  </div>
+  <div class="links"><a class="link" href="entenda.html">Entenda os critérios no Portal ↗</a><a class="link secondary" href="como-preparar.html">Como preparar ↗</a></div>
+</div>
+</details>
+
+<details class="phase" data-phase="2">
+<summary><span class="phase-number">2</span><span class="phase-title"><strong>Escolha o enquadramento</strong><small>Relacione atividade, critério, pontuação e limite aplicável.</small></span><span class="phase-pct">0%</span></summary>
+<div class="phase-body">
+  <div class="logic"><span>Atividade</span><b>→</b><span>Critério</span><b>→</b><span>Pontuação</span><b>→</b><span>Limite / requisito</span></div>
+  <div class="checklist">
+    <label class="task"><input type="checkbox" data-task="2.1"><span><b>Identifiquei o critério que melhor corresponde a cada atividade.</b></span></label>
+    <label class="task"><input type="checkbox" data-task="2.2"><span><b>Conferi a pontuação e os requisitos do nível de RSC que pretendo solicitar.</b></span></label>
+    <label class="task"><input type="checkbox" data-task="2.3"><span><b>Quando havia mais de um enquadramento possível, comparei as opções antes de escolher.</b><small>O servidor indica e fundamenta o enquadramento pretendido; a análise compete à Comissão.</small></span></label>
+    <label class="task"><input type="checkbox" data-task="2.4"><span><b>Não estou usando o mesmo documento para gerar pontuação em mais de um critério.</b></span></label>
+  </div>
+  <div class="rule"><strong>Lembrete:</strong> cada documento comprobatório deve ser utilizado em apenas um critério para fins de pontuação.</div>
+</div>
+</details>
+
+<details class="phase" data-phase="3">
+<summary><span class="phase-number">3</span><span class="phase-title"><strong>Localize e organize os comprovantes</strong><small>Encontre os documentos que comprovam as atividades escolhidas.</small></span><span class="phase-pct">0%</span></summary>
+<div class="phase-body">
+  <div class="checklist">
+    <label class="task"><input type="checkbox" data-task="3.1"><span><b>Localizei os documentos comprobatórios das atividades selecionadas.</b><small>Ex.: certificados, declarações, portarias, atas, publicações ou documentos institucionais admitidos.</small></span></label>
+    <label class="task"><input type="checkbox" data-task="3.2"><span><b>Conferi se cada documento identifica adequadamente a atividade e minha participação.</b></span></label>
+    <label class="task"><input type="checkbox" data-task="3.3"><span><b>Quando necessário, o documento permite identificar o período de realização.</b></span></label>
+    <label class="task"><input type="checkbox" data-task="3.4"><span><b>Verifiquei se há impedimento para reutilização de título, certificado ou atividade já empregado em outra concessão.</b></span></label>
+    <label class="task"><input type="checkbox" data-task="3.5"><span><b>Organizei os comprovantes de acordo com os critérios que pretendo apresentar.</b></span></label>
+  </div>
+  <div class="workspace"><h3>Observações sobre os documentos comprobatórios</h3><textarea data-note="documentos" placeholder="Registre documentos ainda não localizados, pendências, períodos a conferir ou outras observações."></textarea></div>
+  <div class="links"><a class="link" href="documentos.html">Onde localizar documentos ↗</a><a class="link secondary" href="biblioteca.html">Biblioteca ↗</a></div>
+</div>
+</details>
+
+<details class="phase" data-phase="4">
+<summary><span class="phase-number">4</span><span class="phase-title"><strong>Construa o Memorial e a solicitação</strong><small>Use o Assistente RSC-PCCTAE UFPE e fundamente sua trajetória.</small></span><span class="phase-pct">0%</span></summary>
+<div class="phase-body">
+  <div class="rule green"><strong>O Memorial não é uma lista de documentos.</strong> Ele deve apresentar e fundamentar sua trajetória, mostrando a relação entre atividade, critério e documento comprobatório.</div>
+  <div class="logic"><span>Atividade realizada</span><b>→</b><span>Critério escolhido</span><b>→</b><span>Documento comprobatório</span></div>
+  <div class="checklist">
+    <label class="task"><input type="checkbox" data-task="4.1"><span><b>Preenchi a solicitação no Assistente RSC-PCCTAE UFPE.</b></span></label>
+    <label class="task"><input type="checkbox" data-task="4.2"><span><b>Relacionei cada atividade ao critério escolhido e ao respectivo comprovante.</b></span></label>
+    <label class="task"><input type="checkbox" data-task="4.3"><span><b>Elaborei o Memorial Descritivo fundamentando as atividades apresentadas.</b></span></label>
+    <label class="task"><input type="checkbox" data-task="4.4"><span><b>Revisei o Memorial para garantir que a narrativa esteja clara e coerente com os documentos.</b></span></label>
+  </div>
+  <div class="rule"><strong>Estrutura útil para a justificativa:</strong> “Atuei na elaboração do [produto/atividade], no período de [período]... A atividade está sendo apresentada no critério [critério], conforme comprovação constante do documento [documento].”</div>
+  <div class="links"><a class="link" href="https://rsc.ufpe.br/" target="_blank" rel="noopener">Abrir Assistente RSC-PCCTAE UFPE ↗</a><a class="link secondary" href="memorial.html">Orientações para o Memorial ↗</a></div>
+</div>
+</details>
+
+<details class="phase" data-phase="5">
+<summary><span class="phase-number">5</span><span class="phase-title"><strong>Gere, converta e confira os arquivos</strong><small>Prepare o pacote documental antes do SIPAC.</small></span><span class="phase-pct">0%</span></summary>
+<div class="phase-body">
+  <div class="files">
+    <div class="file"><b>Memorial_Descritivo</b></div>
+    <div class="file"><b>Requerimento_RSC</b></div>
+    <div class="file"><b>Anexos</b></div>
+    <div class="file"><b>Comissão</b><br><small>Arquivo de apoio à revisão/conferência.</small></div>
+    <div class="file optional"><b>Comprovante da última titulação</b><br><small>Não obrigatório.</small></div>
+  </div>
+  <div class="checklist">
+    <label class="task"><input type="checkbox" data-task="5.1"><span><b>Baixei os relatórios/arquivos gerados pelo Assistente.</b></span></label>
+    <label class="task"><input type="checkbox" data-task="5.2"><span><b>Abri cada relatório HTML no navegador e converti para PDF.</b><small>Imprimir → Salvar como PDF.</small></span></label>
+    <label class="task"><input type="checkbox" data-task="5.3"><span><b>Reuni os Anexos comprobatórios em um único PDF, mantendo a ordem indicada pelo Assistente.</b><small><a href="https://www.ilovepdf.com/pt/juntar_pdf" target="_blank" rel="noopener noreferrer">Juntar PDFs no iLovePDF ↗</a></small></span></label>
+    <label class="task"><input type="checkbox" data-task="5.4"><span><b>Realizei a assinatura digital dos documentos que exigem assinatura.</b><small><a href="https://www.gov.br/pt-br/servicos/assinatura-eletronica" target="_blank" rel="noopener noreferrer">Acessar a Assinatura Eletrônica GOV.BR ↗</a></small></span></label>
+    <label class="task"><input type="checkbox" data-task="5.5"><span><b>Revisei os arquivos finais antes de abrir o processo.</b></span></label>
+  </div>
+  <div class="rule red"><strong>Atenção:</strong> os relatórios exportados pela ferramenta são gerados em HTML. Antes de incluí-los no protocolo, abra-os no navegador, converta-os para PDF e realize a assinatura digital quando aplicável. <a href="https://www.gov.br/pt-br/servicos/assinatura-eletronica" target="_blank" rel="noopener noreferrer">Acessar a Assinatura Eletrônica GOV.BR ↗</a></div>
+</div>
+</details>
+
+<details class="phase" data-phase="6">
+<summary><span class="phase-number">6</span><span class="phase-title"><strong>Abra o processo no SIPAC</strong><small>Cadastre corretamente o processo administrativo e os documentos.</small></span><span class="phase-pct">0%</span></summary>
+<div class="phase-body">
+  <div class="checklist">
+    <label class="task"><input type="checkbox" data-task="6.1"><span><b>Selecionei o tipo de processo: RECONHECIMENTO DE SABERES E COMPETÊNCIAS (TAE).</b></span></label>
+    <label class="task"><input type="checkbox" data-task="6.2"><span><b>Usei a classificação CONARQ 023.157 – Titulação.</b></span></label>
+    <label class="task"><input type="checkbox" data-task="6.3"><span><b>Informei no Assunto Detalhado o nível de RSC-PCCTAE pleiteado.</b></span></label>
+    <label class="task"><input type="checkbox" data-task="6.4"><span><b>Cadastrei-me como interessado, com nome completo e SIAPE.</b></span></label>
+    <label class="task"><input type="checkbox" data-task="6.5"><span><b>Classifiquei como restritos os documentos que contêm informações pessoais.</b></span></label>
+    <label class="task"><input type="checkbox" data-task="6.6"><span><b>Estou utilizando um único requerimento e um único processo para o nível pleiteado.</b></span></label>
+    <label class="task"><input type="checkbox" data-task="6.7"><span><b>Incluí e assinei os documentos necessários antes de encaminhar o processo.</b></span></label>
+  </div>
+  <div class="rule"><strong>Destino:</strong> CRSC-PROGEPE — código <strong>11.07.64</strong>.</div>
+  <div class="links"><a class="link" href="como-solicitar.html">Passo a passo do SIPAC ↗</a></div>
+</div>
+</details>
+
+<details class="phase" data-phase="7">
+<summary><span class="phase-number">7</span><span class="phase-title"><strong>Faça a conferência final e envie</strong><small>Evite pendências antes da tramitação.</small></span><span class="phase-pct">0%</span></summary>
+<div class="phase-body">
+  <div class="checklist">
+    <label class="task"><input type="checkbox" data-task="7.1"><span><b>Conferi novamente a relação atividade → critério → comprovante.</b></span></label>
+    <label class="task"><input type="checkbox" data-task="7.2"><span><b>Anexei Memorial_Descritivo, Requerimento_RSC, Anexos e Comissão.</b><small>O comprovante da última titulação também pode ser enviado, mas não é obrigatório.</small></span></label>
+    <label class="task"><input type="checkbox" data-task="7.3"><span><b>Assinei eletronicamente os documentos que exigem assinatura.</b></span></label>
+    <label class="task"><input type="checkbox" data-task="7.4"><span><b>Revisei o processo e encaminhei para a CRSC-PROGEPE (11.07.64).</b></span></label>
+    <label class="task"><input type="checkbox" data-task="7.5"><span><b>Guardei o número do processo.</b></span></label>
+  </div>
+</div>
+</details>
+
+<details class="phase" data-phase="8">
+<summary><span class="phase-number">8</span><span class="phase-title"><strong>Acompanhe o processo</strong><small>O trabalho do servidor continua após o protocolo.</small></span><span class="phase-pct">0%</span></summary>
+<div class="phase-body">
+  <div class="rule red"><strong>Responsabilidade do requerente:</strong> acompanhar o processo administrativo e resolver eventuais pendências.</div>
+  <div class="checklist">
+    <label class="task"><input type="checkbox" data-task="8.1"><span><b>Estou consultando a tramitação do processo no SIPAC regularmente.</b></span></label>
+    <label class="task"><input type="checkbox" data-task="8.2"><span><b>Verifico se houve devolução, diligência ou solicitação de complementação.</b></span></label>
+    <label class="task"><input type="checkbox" data-task="8.3"><span><b>Se houver complementação solicitada, providenciarei a documentação necessária.</b></span></label>
+    <label class="task"><input type="checkbox" data-task="8.4"><span><b>Acompanhei o resultado da análise da Comissão.</b></span></label>
+    <label class="task"><input type="checkbox" data-task="8.5"><span><b>Se houver indeferimento, verifiquei a possibilidade de reconsideração no prazo aplicável.</b><small>O FAQ informa prazo de 10 dias para solicitar reconsideração à Comissão.</small></span></label>
+  </div>
+  <div class="logic"><span>Servidor / SIPAC</span><b>→</b><span>Comissão RSC</span><b>→</b><span>Formare</span><b>→</b><span>Divisão de Pagamentos</span></div>
+  <div class="rule"><strong>Prazo de análise:</strong> o material da UFPE informa prazo máximo de até 120 dias para análise da Comissão, contado do protocolo ou da data de complementação documental solicitada.</div>
+  <div class="workspace"><h3>Número do meu processo</h3><input type="text" data-note="processo" placeholder="Ex.: 23076.xxxxxx/2026-xx"></div>
+  <div class="workspace"><h3>Pendências / observações</h3><textarea data-note="pendencias" placeholder="Registre aqui movimentações, documentos solicitados, datas ou providências."></textarea></div>
+  <div class="links"><a class="link" href="https://sipac.ufpe.br/public/jsp/processos/processos.jsf" target="_blank" rel="noopener">Consultar processo no SIPAC ↗</a></div>
+</div>
+</details>
+
+<div class="final-status">
+  <h2>Seu status na jornada</h2>
+  <p class="status-big" id="finalMessage">Comece marcando as tarefas concluídas.</p>
+  
+</div>
+
+</div>
+</section>
+</main>
+<footer class="footer"><div class="container footer-content"><div class="footer-credit"><p>Portal elaborado pela Unidade de Desenvolvimento de Pessoal (UDP), da Divisão de Gestão de Pessoas (DIVGP), do Hospital das Clínicas da UFPE/HU Brasil. <strong>Dúvidas?</strong> Entre em contato pelo telefone da DIVGP (081) 2126-3782 (WhatsApp) ou envie e-mail para a Progepe: rsc.progepe@ufpe.br.</p></div></div></footer>
+<script src="assets/js/main.js"></script>
+<script>
+const KEY='rscJourneyPrototypeV1';
+const NOTEKEY='rscJourneyNotesV1';
+const checks=[...document.querySelectorAll('input[type="checkbox"][data-task]')];
+const notes=[...document.querySelectorAll('[data-note]')];
+
+function load(){
+  let saved={}; let n={};
+  try{ saved=JSON.parse(localStorage.getItem(KEY)||'{}'); }catch(e){}
+  try{ n=JSON.parse(localStorage.getItem(NOTEKEY)||'{}'); }catch(e){}
+  checks.forEach(c=>c.checked=!!saved[c.dataset.task]);
+  notes.forEach(x=>x.value=n[x.dataset.note]||'');
+  update();
+}
+function save(){
+  const s={}; checks.forEach(c=>s[c.dataset.task]=c.checked);
+  localStorage.setItem(KEY,JSON.stringify(s));
+  const n={}; notes.forEach(x=>n[x.dataset.note]=x.value);
+  localStorage.setItem(NOTEKEY,JSON.stringify(n));
+  update();
+}
+function update(){
+  const done=checks.filter(c=>c.checked).length, total=checks.length, pct=Math.round(done/total*100);
+  document.getElementById('progressBar').style.width=pct+'%';
+  document.getElementById('progressNumber').textContent=pct+'% concluído';
+  document.getElementById('doneCount').textContent=done;
+  document.getElementById('todoCount').textContent=total-done;
+  document.querySelectorAll('.phase').forEach(p=>{
+    const cs=[...p.querySelectorAll('input[type="checkbox"][data-task]')];
+    const d=cs.filter(c=>c.checked).length;
+    const q=cs.length?Math.round(d/cs.length*100):0;
+    p.querySelector('.phase-pct').textContent=q+'%';
+  });
+  const msg=document.getElementById('finalMessage');
+  if(pct===100) msg.textContent='Checklist concluído. Continue acompanhando o processo até a finalização.';
+  else if(pct>=75) msg.textContent='Você está na etapa final. Revise com atenção antes e depois do protocolo.';
+  else if(pct>=40) msg.textContent='Boa parte da preparação já foi feita. Continue seguindo as etapas na ordem.';
+  else if(pct>0) msg.textContent='Jornada iniciada. Avance sem pular a relação entre atividade, critério e comprovante.';
+  else msg.textContent='Comece marcando as tarefas concluídas.';
+}
+function resetJourney(){
+  if(confirm('Deseja apagar todas as marcações e anotações deste navegador?')){
+    localStorage.removeItem(KEY); localStorage.removeItem(NOTEKEY);
+    checks.forEach(c=>c.checked=false); notes.forEach(n=>n.value=''); update();
+  }
+}
+function expandAll(){document.querySelectorAll('.phase').forEach(x=>x.open=true)}
+function collapseAll(){document.querySelectorAll('.phase').forEach(x=>x.open=false)}
+checks.forEach(c=>c.addEventListener('change',save));
+notes.forEach(n=>n.addEventListener('input',save));
+load();
+
+let _printStates=[];
+window.addEventListener('beforeprint',()=>{
+  _printStates=[...document.querySelectorAll('.phase')].map(x=>x.open);
+  document.querySelectorAll('.phase').forEach(x=>x.open=true);
+});
+window.addEventListener('afterprint',()=>{
+  document.querySelectorAll('.phase').forEach((x,i)=>x.open=_printStates[i] ?? x.open);
+});
+</script>
+</body></html>
